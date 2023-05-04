@@ -14,31 +14,43 @@ function App() {
   const [units, setUnits] = useState("metric");
   const [weather, setWeather] = useState(null);
 
+  // useEffect(() => {
+  //   const fetchWeather = async () => {
+  //     const message = query.q ? query.q : "current location.";
+
+  //     //toast.info("Fetching weather for " + message);
+
+  //     await getFormattedWeatherData({ ...query, units }).then((data) => {
+  //       toast.success(
+  //         `Successfully fetched weather for ${data.name}, ${data.country}.`
+  //       );
+  //       setWeather(data);
+  //     });
+  //   };
+
+  //   fetchWeather();
+  // }, [query, units]);
+
   useEffect(() => {
     const fetchWeather = async () => {
-      const message = query.q ? query.q : "current location.";
-
-      toast.info("Fetching weather for " + message);
-
-      await getFormattedWeatherData({ ...query, units }).then((data) => {
-        toast.success(
-          `Successfully fetched weather for ${data.name}, ${data.country}.`
-        );
-
-        setWeather(data);
-      });
+      try {
+        const data = await getFormattedWeatherData({ ...query, units });
+        if (data) {
+          toast.success(
+            `Successfully fetched weather for ${data.name}, ${data.country}.`
+          );
+          setWeather(data);
+        } else {
+          toast.error("No weather data found for the given location.");
+        }
+      } catch (error) {
+        toast.error("Error fetching weather data. Please try again later.");
+        console.error(error);
+      }
     };
 
     fetchWeather();
   }, [query, units]);
-
-  // const formatBackground = () => {
-  //   if (!weather) return "from-black to-blur";
-  //   const threshold = units === "metric" ? 20 : 60;
-  //   if (weather.temp <= threshold) return "from-black to-blur";
-
-  //   return "from-yellow-700 to-orange-700";
-  // };
 
   return (
     <div

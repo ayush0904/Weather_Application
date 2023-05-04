@@ -13,14 +13,14 @@ import React, { useState } from "react";
 		const zipCodeRegex = /^\d{5}(?:[-\s]\d{4})?$/;
 	    if (city !== ""){
 			if (zipCodeRegex.test(city)) {
-                //toast.error("Please enter a valid zip code");
+        
 				setQuery({ zip: city });
             }
 			else{
 				setQuery({ q: city });
 			}
 		} 
-		// Write the code for zip 
+		
 	  };
 	  const check = (event) => {
 		if (event.key === "Enter") {
