@@ -1,18 +1,35 @@
 import React, { useState } from "react";
 	import { UilSearch, UilLocationPoint } from "@iconscout/react-unicons";
 	import { toast } from "react-toastify";
-	
+
 	function Inputs({ setQuery, units, setUnits }) {
 	  const [city, setCity] = useState("");
-	
 	  const handleUnitsChange = (e) => {
 	    const selectedUnit = e.currentTarget.name;
 	    if (units !== selectedUnit) setUnits(selectedUnit);
 	  };
 	
 	  const handleSearchClick = () => {
-	    if (city !== "") setQuery({ q: city });
+		const zipCodeRegex = /^\d{5}(?:[-\s]\d{4})?$/;
+	    if (city !== ""){
+			if (zipCodeRegex.test(city)) {
+                //toast.error("Please enter a valid zip code");
+				setQuery({ zip: city });
+            }
+			else{
+				setQuery({ q: city });
+			}
+		} 
+		// Write the code for zip 
 	  };
+	  const check = (event) => {
+		if (event.key === "Enter") {
+			console.log("Enter key pressed!");
+			handleSearchClick();
+		  }
+	  };
+
+	 
 	
 	  const handleLocationClick = () => {
 	    if (navigator.geolocation) {
@@ -21,7 +38,6 @@ import React, { useState } from "react";
 	        toast.success("Location fetched!");
 	        let lat = position.coords.latitude;
 	        let lon = position.coords.longitude;
-	
 	        setQuery({
 	          lat,
 	          lon,
@@ -29,6 +45,7 @@ import React, { useState } from "react";
 	      });
 	    }
 	  };
+	 
 	
 	  return (
 	    <div className="flex flex-row justify-center my-6">
@@ -37,9 +54,11 @@ import React, { useState } from "react";
 	          value={city}
 	          onChange={(e) => setCity(e.currentTarget.value)}
 	          type="text"
-	          placeholder="Search for city...."
-	          className="text-xl font-light p-2 w-full shadow-xl focus:outline-none capitalize placeholder:lowercase"
+			  className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
+	          placeholder="Search for city or Zip Code"
+			  onKeyDown={check}
 	        />
+			
 	        <UilSearch
 	          size={25}
 	          className="text-white cursor-pointer transition ease-out hover:scale-125"

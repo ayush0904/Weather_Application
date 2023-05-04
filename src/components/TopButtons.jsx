@@ -4,23 +4,23 @@ import React from "react";
 	  const cities = [
 	    {
 	      id: 1,
-	      title: "London",
+	      title: "New York",
 	    },
 	    {
 	      id: 2,
-	      title: "Sydney",
+	      title: "Los Angeles",
 	    },
 	    {
 	      id: 3,
-	      title: "Tokyo",
+	      title: "Austin",
 	    },
 	    {
 	      id: 4,
-	      title: "Toronto",
+	      title: "San Francisco",
 	    },
 	    {
 	      id: 5,
-	      title: "Paris",
+	      title: "Chicago",
 	    },
 	  ];
 	

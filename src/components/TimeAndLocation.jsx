@@ -7,6 +7,8 @@ import React from "react";
 	      <div className="flex items-center justify-center my-6">
 	        <p className="text-white text-xl font-extralight">
 	          {formatToLocalTime(dt, timezone)}
+			  <h1>{dt}</h1>
+			  <h1>{timezone}</h1>
 	        </p>
 	      </div>
 	
