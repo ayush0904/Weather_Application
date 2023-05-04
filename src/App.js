@@ -40,6 +40,8 @@ function App() {
             `Successfully fetched weather for ${data.name}, ${data.country}.`
           );
           setWeather(data);
+          
+         
         } else {
           toast.error("No weather data found for the given location.");
         }
@@ -62,6 +64,7 @@ function App() {
       {weather && (
         <div>
           <TimeAndLocation weather={weather} />
+          
           <TemperatureAndDetails weather={weather} />
 
           <Forecast title="hourly forecast" items={weather.hourly} />

@@ -1,4 +1,4 @@
-import { DateTime } from "luxon";
+import { DateTime,IANAZone,FixedOffsetZone } from "luxon";
 const API_KEY = process.env.REACT_APP_API_URL;  // API KEY Store in .env file
 const BASE_URL = "https://api.openweathermap.org/data/2.5";
 
@@ -18,6 +18,7 @@ const formatCurrentWeather = (data) => {
     sys: { country, sunrise, sunset },
     weather,
     wind: { speed },
+    timezone,
   } = data;
 
   const { main: details, icon } = weather[0];
@@ -38,6 +39,7 @@ const formatCurrentWeather = (data) => {
     details,
     icon,
     speed,
+    timezone,
   };
 };
 
@@ -45,25 +47,34 @@ const formatCurrentWeather = (data) => {
 
 const formatForecastWeather = (data) => {
     let { list } = data;
-    let {timezone} = data;
-   
+    let {timezone} = data.city;
+    let uniqueDates = [];
     let daily = list
-    .filter((obj, index, self) => {
+    .filter((obj) => {
       const currentDate = new Date(obj.dt_txt.replace(/-/g, "/")); // Replace '-' with '/' for Safari compatibility
-      return self.findIndex(o => new Date(o.dt_txt.replace(/-/g, "/")).toDateString() === currentDate.toDateString()) === index;
+      const currentDateString = currentDate.toDateString();
+      if (!uniqueDates.includes(currentDateString)) {
+        uniqueDates.push(currentDateString);
+        return true;
+      }
+      return false;
     })
-    
-    .slice(1, 6).map((d) => {
-        return {
-        title: formatToLocalTime(d.dt, timezone, "ccc"),
+    .map((d) => {
+      const currentDate = new Date(d.dt_txt.replace(/-/g, "/"));
+      const currentDay = currentDate.toLocaleDateString(undefined, { weekday: "short" });
+      return {
+        title: currentDay,
         temp: d.main.temp,
         icon: d.weather[0].icon,
-        };
+      };
     });
 
     let hourly = list.slice(1, 6).map((d) => {
         return {
-        title: formatToLocalTime(d.dt, timezone, "hh:mm a"),
+        title: formatToLocalTime(d.dt, timezone,
+          {hour: 'numeric',
+          minute: 'numeric',
+          hour12: true}),
         temp: d.main.temp,
         icon: d.weather[0].icon,
         };
@@ -92,16 +103,39 @@ const getFormattedWeatherData = async (searchParams) => {
 const formatToLocalTime = (
   secs,
   zone,
-  format = "cccc, dd LLL yyyy' | Local time: 'hh:mm a"
+  options = {
+    weekday: 'long',
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric',
+    hour: 'numeric',
+    minute: 'numeric',
+    hour12: true,
+    timeZoneName: 'short'
+  },
 ) => {try {
-  const localDateTime = DateTime.fromSeconds(secs).setZone(zone);
-  return localDateTime.toFormat(format);
+
+const timestamp = secs; // Unix timestamp in seconds
+const offset = zone/60; // UTC offset in minutes (-4 hours)
+
+const date = new Date(timestamp * 1000); // convert timestamp to milliseconds
+const utc = date.getTime() + (date.getTimezoneOffset() * 60000); // convert to UTC
+const local = utc + (offset * 60000); // add offset to get local time in milliseconds
+
+const localDate = new Date(local); // create new Date object for local time
+
+const formattedDate = localDate.toLocaleString('en-US', options);
+
+
+return formattedDate;
 } catch (error) {
   console.error(error);
   return "Invalid time zone name";
 }
+}
 
-};//DateTime.fromSeconds(secs).setZone(zone).toFormat(format);
+
+
 
 const iconUrlFromCode = (code) =>
   `http://openweathermap.org/img/wn/${code}@2x.png`;

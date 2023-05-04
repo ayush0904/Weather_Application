@@ -24,7 +24,7 @@ import React, { useState } from "react";
 	  };
 	  const check = (event) => {
 		if (event.key === "Enter") {
-			console.log("Enter key pressed!");
+			
 			handleSearchClick();
 		  }
 	  };
