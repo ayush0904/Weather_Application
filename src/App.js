@@ -14,23 +14,6 @@ function App() {
   const [units, setUnits] = useState("metric");
   const [weather, setWeather] = useState(null);
 
-  // useEffect(() => {
-  //   const fetchWeather = async () => {
-  //     const message = query.q ? query.q : "current location.";
-
-  //     //toast.info("Fetching weather for " + message);
-
-  //     await getFormattedWeatherData({ ...query, units }).then((data) => {
-  //       toast.success(
-  //         `Successfully fetched weather for ${data.name}, ${data.country}.`
-  //       );
-  //       setWeather(data);
-  //     });
-  //   };
-
-  //   fetchWeather();
-  // }, [query, units]);
-
   useEffect(() => {
     const fetchWeather = async () => {
       try {
@@ -40,8 +23,6 @@ function App() {
             `Successfully fetched weather for ${data.name}, ${data.country}.`
           );
           setWeather(data);
-          
-         
         } else {
           toast.error("No weather data found for the given location.");
         }
@@ -64,7 +45,7 @@ function App() {
       {weather && (
         <div>
           <TimeAndLocation weather={weather} />
-          
+
           <TemperatureAndDetails weather={weather} />
 
           <Forecast title="hourly forecast" items={weather.hourly} />
@@ -74,8 +55,6 @@ function App() {
 
       <ToastContainer autoClose={5000} theme="colored" newestOnTop={true} />
     </div>
-    
-
   );
 }
 
