@@ -1,3 +1,7 @@
+/*
+  Created By : Ayush Tripathi
+  Description : This is a react component for the hour and daily forecast
+*/
 import React from "react";
 import { iconUrlFromCode } from "../services/weatherService";
 

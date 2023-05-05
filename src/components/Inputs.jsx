@@ -1,3 +1,7 @@
+/*
+  Created By : Ayush Tripathi
+  Description : This is a react component for taking the input from the user.
+*/
 import React, { useState } from "react";
 import { UilSearch, UilLocationPoint } from "@iconscout/react-unicons";
 import { toast } from "react-toastify";

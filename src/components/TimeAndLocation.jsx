@@ -1,3 +1,7 @@
+/*
+  Created By : Ayush Tripathi
+  Description : This is a react component for tdisplaying the time and day of the search result.
+*/
 import React from "react";
 import { formatToLocalTime } from "../services/weatherService";
 

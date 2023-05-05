@@ -1,3 +1,8 @@
+/*
+  Created By : Ayush Tripathi
+  Description : The main fuctionality of the file is to access the weather data from the OpenWeatherMap API.
+                Map the data to the required format and return the data in the required format.
+*/
 const API_KEY = process.env.REACT_APP_API_URL; // API KEY Store in .env file
 const BASE_URL = "https://api.openweathermap.org/data/2.5";
 
@@ -56,6 +61,7 @@ const formatForecastWeather = (data) => {
       }
       return false;
     })
+    .slice(0,5)
     .map((d) => {
       const currentDate = new Date(d.dt_txt.replace(/-/g, "/"));
       const currentDay = currentDate.toLocaleDateString(undefined, {
@@ -68,7 +74,7 @@ const formatForecastWeather = (data) => {
       };
     });
 
-  let hourly = list.slice(1, 6).map((d) => {
+  let hourly = list.slice(0, 5).map((d) => {
     return {
       title: formatToLocalTime(d.dt, timezone, {
         hour: "numeric",
@@ -89,8 +95,7 @@ const getFormattedWeatherData = async (searchParams) => {
     searchParams
   ).then(formatCurrentWeather);
 
-  const { lat, lon } = formattedCurrentWeather;
-
+  
   const formattedForecastWeather = await getWeatherData(
     "forecast",
     searchParams

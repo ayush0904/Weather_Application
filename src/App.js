@@ -1,3 +1,7 @@
+/*
+  Created By : Ayush Tripathi
+  Description : This is the main class for the app. It contains all the components that will be used in the app.
+*/
 import "./App.css";
 import TopButtons from "./components/TopButtons";
 import Inputs from "./components/Inputs";
@@ -45,15 +49,14 @@ function App() {
       {weather && (
         <div>
           <TimeAndLocation weather={weather} />
-
           <TemperatureAndDetails weather={weather} />
-
-          <Forecast title="hourly forecast" items={weather.hourly} />
-          <Forecast title="daily forecast" items={weather.daily} />
+          <Forecast title="Forecast for today" items={weather.hourly} />
+          <Forecast title="Forecast for next 5 days" items={weather.daily} />
         </div>
       )}
 
       <ToastContainer autoClose={5000} theme="colored" newestOnTop={true} />
+      
     </div>
   );
 }
